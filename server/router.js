@@ -4,6 +4,10 @@ const mid = require('./middleware');
 const router = (app) => {
     app.get('/getDomos', mid.requiresLogin, controllers.Domo.getDomos);
     
+    // DOMOMAKER E
+    app.get('/changePassword', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassPage);
+    app.post('/changePassword', mid.requiresSecure, mid.requiresLogin, controllers.Account.changePassword);
+
     app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
     app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);
     

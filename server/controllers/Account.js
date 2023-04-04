@@ -61,9 +61,20 @@ const signup = async (req, res) => {
     }
 };
 
+// DOMOMAKER E
+const changePassPage = (req, res) => {
+    return res.render('changePass');
+}
+
+const changePassword = async (req, res) => {
+    
+}
+
 module.exports = {
     loginPage,
     login,
     logout,
-    signup
+    signup,
+    changePassPage,
+    changePassword
 }
