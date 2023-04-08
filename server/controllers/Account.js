@@ -63,11 +63,50 @@ const signup = async (req, res) => {
 
 // DOMOMAKER E
 const changePassPage = (req, res) => {
-    return res.render('changePass');
+    return res.render('reset');
 }
 
+// allows a current user to change their password
 const changePassword = async (req, res) => {
-    
+    //req.session.account.username
+    const username = req.session.account.username;
+    const oldPass = `${req.body.oldPass}`;
+    const pass2 = `${req.body.pass2}`;
+    const pass3 = `${req.body.pass3}`;
+
+    if ( !username || !oldPass || !pass2 || !pass3) {
+        return res.status(400).json({error: 'All fields are required!'});
+    }
+
+    if ( pass2 !== pass3) {
+        return res.status(400).json({ error: 'Passwords do not match!' });
+    }
+
+    try {
+        await Account.authenticate(username, oldPass, (err, account) => {
+            if (err || !account) {
+                return res.status(401).json({ error: 'Old password is incorrect!' });
+            }
+        });
+        const hash = await Account.generateHash(pass2);
+        await Account.updateOne({ username: username }, { password: hash});
+
+        
+        await Account.authenticate(username, pass2, (err, account) => {
+            if (err || !account) {
+                console.log(err);
+                return res.status(500).json({ error: 'An error occured!' });
+            }
+
+            // update session variables
+            req.session.account = Account.toAPI(account);
+        });
+
+        return res.json({ redirect: '/maker' });
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({ error: 'An error occured!' });
+    }
 }
 
 module.exports = {

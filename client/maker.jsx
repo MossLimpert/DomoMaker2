@@ -78,12 +78,12 @@ const loadDomosFromServer = async () => {
 };
 
 const init = () => {
-    const changePassButton = document.getElementById('changePass');
+    //const changePassButton = document.getElementById('changePass');
 
-    changePassButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        // HERE
-    })
+    // changePassButton.addEventListener('click', (e) => {
+    //     e.preventDefault();
+    //     // HERE
+    // })
 
     ReactDOM.render(
         <DomoForm />,
