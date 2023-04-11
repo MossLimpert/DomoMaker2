@@ -83,29 +83,20 @@ const changePassword = async (req, res) => {
     }
 
     try {
-        await Account.authenticate(username, oldPass, (err, account) => {
+        await Account.authenticate(username, oldPass, async (err, account) => {
             if (err || !account) {
                 return res.status(401).json({ error: 'Old password is incorrect!' });
             }
 
-            // I need a return statement here
-            // but I think the right thing to do is to not
-            // use this function?
-        });
-        const hash = await Account.generateHash(pass2);
-        await Account.updateOne({ username: username }, { password: hash});
+            
+            const hash = await Account.generateHash(pass2);
+            await Account.updateOne({ username: username }, { password: hash});
 
-        
-        await Account.authenticate(username, pass2, (err, account) => {
-            if (err || !account) {
-                console.log(err);
-                return res.status(500).json({ error: 'An error occured!' });
-            }
-
-            // update session variables
             req.session.account = Account.toAPI(account);
             return res.json({ redirect: '/maker' });
+            
         });
+        
 
     } catch (err) {
         console.log(err);
