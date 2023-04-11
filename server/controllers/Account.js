@@ -87,6 +87,10 @@ const changePassword = async (req, res) => {
             if (err || !account) {
                 return res.status(401).json({ error: 'Old password is incorrect!' });
             }
+
+            // I need a return statement here
+            // but I think the right thing to do is to not
+            // use this function?
         });
         const hash = await Account.generateHash(pass2);
         await Account.updateOne({ username: username }, { password: hash});
